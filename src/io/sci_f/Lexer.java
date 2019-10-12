@@ -3,7 +3,7 @@ package io.sci_f;
 import io.sci_f.register.SymbolTableManager;
 import io.sci_f.register.TokenTableManager;
 
-public class Lexer {
+class Lexer {
 
     private static Lexer instance;
 
@@ -12,7 +12,7 @@ public class Lexer {
         TokenTableManager.init();
     }
 
-    public static Lexer init(){
+    static Lexer init(){
         if (instance == null) instance = new Lexer();
         return instance;
     }
