@@ -6,6 +6,9 @@ public class Main {
         Core.init();
         Core compiler = Core.get();
         compiler.load();
+        compiler.preprocess("");
+        compiler.process();
+        compiler.reset();
         compiler.end();
     }
 

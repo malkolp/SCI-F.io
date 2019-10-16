@@ -23,13 +23,22 @@ public class Core {
         Register.init_token(br.keyword(),br.code(),br.action());
     }
 
-    public String preprocess(String input){
-        return input;
+    public String preprocess(String url){
+        preprocess = Pre.get().process(url);
+        return preprocess;
+    }
+
+    public void process(){
+
     }
 
     public static Core get(){
         if (instance == null) init();
         return instance;
+    }
+
+    public void reset(){
+
     }
 
     public void end(){
