@@ -6,6 +6,7 @@ import io.sci_f.register.Register;
 public class Core {
 
     private static Core instance;
+    private String preprocess;
 
     private Core(){}
 
@@ -13,11 +14,17 @@ public class Core {
         if (instance == null) instance = new Core();
         Brain.init();
         Register.init();
+        Pre.init();
+        Lexer.init();
     }
 
     public void load(){
         Brain br = Brain.get();
         Register.init_token(br.keyword(),br.code(),br.action());
+    }
+
+    public String preprocess(String input){
+        return input;
     }
 
     public static Core get(){
@@ -26,6 +33,8 @@ public class Core {
     }
 
     public void end(){
+        Lexer.end();
+        Pre.end();
         Register.end();
         Brain.end();
         instance = null;
