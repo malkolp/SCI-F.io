@@ -1,11 +1,19 @@
 package io.sci_f.register;
 
 class Token {
-    private int[] value;
+    private double code;
+    private int action;
 
-    Token(int value,int subset,int action){
-        this.value = new int[]{value,subset,action};
+    Token(double code,int action){
+        this.code = code;
+        this.action = action;
     }
 
-    int[] getValue(){return value;}
+    public double getCode() {
+        return code;
+    }
+
+    public int getAction() {
+        return action;
+    }
 }
