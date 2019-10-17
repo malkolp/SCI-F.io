@@ -23,6 +23,14 @@ public class Register {
         }
     }
 
+    public boolean checkNonAlphanumeric(char key){
+        return TokenTable.get().isNotAlphanumeric(key+"");
+    }
+
+    public double[] getToken(String key){
+        return TokenTable.get().getValue(key);
+    }
+
     public static Register get(){if (instance == null) init();return instance;}
 
     public static void end(){
