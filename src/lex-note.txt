@@ -21,7 +21,10 @@ program : lex (String code)
                         true -> key == decimal() || alphanum() ?
                                     true -> key = key + code pointer
                                             pointer++
-                                    fals -> !ERROR STOP COMPILE!
+                                    fals -> key == float() ?
+                                                true -> token.register key
+                                                        key = code pointer
+                                                        pointer++
                         fals -> key == alphanum() ?
                                     true -> key = key + code pointer
                                             pointer++
@@ -38,11 +41,16 @@ program : lex (String code)
                                             key = code pointer
                                             nonalphanum = 1
                                             pointer++
-                        fals -> nonalphanum == 3 ?
+                        fals -> key == float() ?
                                     true -> token.register key
                                             key = code pointer
                                             nonalphanum = 1
                                             pointer++
-                                    fals -> key = key + code pointer
-                                            nonalphanum++
-                                            pointer++
+                                    fals -> nonalphanum == 3 ?
+                                                true -> token.register key
+                                                        key = code pointer
+                                                        nonalphanum = 1
+                                                        pointer++
+                                                fals -> key = key + code pointer
+                                                        nonalphanum++
+                                                        pointer++
