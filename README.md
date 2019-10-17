@@ -1,6 +1,6 @@
 # SCI-F.io
 SCI-F.io is a simplify syntax and powerful language design for processing and app development.
-##All Thanks
+## All Thanks
 * thanks to Allah for the life, health, time and knowledge.
 * thanks to prophet Mohammad PBUH and his companions for their love.
 * thanks to my beloved parent and family for their financial and morale support.
