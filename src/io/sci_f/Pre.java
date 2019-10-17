@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 class Pre {
 
@@ -26,10 +25,12 @@ class Pre {
         input = input.replaceAll(multiline_comment,"");
         input = input.replaceAll(singleline_comment,"");
         input = input.replaceAll(multispace," ");
-        if (input.charAt(0) == ' '){
-            StringBuilder sb = new StringBuilder(input);
-            sb.deleteCharAt(0);
-            input = sb.toString();
+        if (input.length()>0){
+            if (input.charAt(0) == ' '){
+                StringBuilder sb = new StringBuilder(input);
+                sb.deleteCharAt(0);
+                input = sb.toString();
+            }
         }
         return input;
     }
@@ -49,7 +50,6 @@ class Pre {
                 return out;
             }
         } catch (IOException e) {
-            e.printStackTrace();
             return "";
         }
         return "";

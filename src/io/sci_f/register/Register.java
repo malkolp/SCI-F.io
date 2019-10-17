@@ -16,10 +16,10 @@ public class Register {
         }
     }
 
-    public static void init_token(ArrayList<String> key,ArrayList<Double> code, ArrayList<Integer> action){
+    public static void init_token(ArrayList<String> key,ArrayList<Double> code, ArrayList<Integer> action, ArrayList<Integer> type){
         TokenTable tkn = TokenTable.get();
         for (int i = 0 ; i < key.size();i++){
-            tkn.add(key.get(i),code.get(i),action.get(i));
+            tkn.add(key.get(i),code.get(i),action.get(i),type.get(i));
         }
     }
 

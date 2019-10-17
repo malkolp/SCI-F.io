@@ -11,13 +11,15 @@ public class Brain {
     private ArrayList<String> keyword;
     private ArrayList<Double> code;
     private ArrayList<Integer> action;
+    private ArrayList<Integer> type;
 
     private Brain(){
         keyword = new ArrayList<>();
         code = new ArrayList<>();
         action = new ArrayList<>();
+        type = new ArrayList<>();
         File file = new File("src/io/sci_f/brain/keytoken.neur");
-        Pattern pattern = Pattern.compile("\"([\\w,'\";.\\*/%=?<>!&|^$()\\[\\]{}+-]*)\"\\s+\\|\\s*(\\d+[.\\d]*)\\s*\\|\\s*(\\d+)") ;
+        Pattern pattern = Pattern.compile("\"([\\w,'\";.\\*/%=?<>!&|^$()\\[\\]{}+-]*)\"\\s+\\|\\s*(\\d+[.\\d]*)\\s*\\|\\s*(\\d+)\\s*\\|\\s*(\\d)") ;
         Matcher m;
         String tmp = "";
         try {
@@ -28,6 +30,7 @@ public class Brain {
                     keyword.add(m.group(1));
                     code.add(Double.parseDouble(m.group(2)));
                     action.add(Integer.parseInt(m.group(3)));
+                    type.add(Integer.parseInt(m.group(4)));
                 }
             }
         } catch (IOException e) {
@@ -43,6 +46,7 @@ public class Brain {
         instance.keyword = null;
         instance.code = null;
         instance.action = null;
+        instance.type = null;
         instance = null;
     }
 
@@ -56,5 +60,9 @@ public class Brain {
 
     public ArrayList<Integer> action() {
         return action;
+    }
+
+    public ArrayList<Integer> type() {
+        return type;
     }
 }

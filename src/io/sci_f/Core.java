@@ -15,12 +15,13 @@ public class Core {
         Brain.init();
         Register.init();
         Pre.init();
+        Queue.init();
         Lexer.init();
     }
 
     public void load(){
         Brain br = Brain.get();
-        Register.init_token(br.keyword(),br.code(),br.action());
+        Register.init_token(br.keyword(),br.code(),br.action(),br.type());
     }
 
     public String preprocess(String url){
@@ -29,7 +30,8 @@ public class Core {
     }
 
     public void process(){
-
+        Lexer lexer = Lexer.get();
+        lexer.process(preprocess);
     }
 
     public static Core get(){
@@ -43,6 +45,7 @@ public class Core {
 
     public void end(){
         Lexer.end();
+        Queue.end();
         Pre.end();
         Register.end();
         Brain.end();

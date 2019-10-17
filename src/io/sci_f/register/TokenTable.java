@@ -13,13 +13,15 @@ class TokenTable {
 
     static TokenTable get(){if (instance == null) init();return instance;}
 
-    void add(String key,double code, int action){
-        tokentable.put(key,new Token(code, action));
+    void add(String key,double code, int action, int type){
+        tokentable.put(key,new Token(code, action,type));
     }
 
     int get_action(String key){return tokentable.get(key).getAction();}
 
     double get_code(String key){return tokentable.get(key).getCode();}
+
+    double get_type(String key){return tokentable.get(key).getCode();}
 
     static void end(){
         tokentable = null;

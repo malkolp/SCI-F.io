@@ -3,17 +3,21 @@ package io.sci_f.register;
 class Token {
     private double code;
     private int action;
+    private int type;
 
-    Token(double code,int action){
+    Token(double code,int action, int type){
         this.code = code;
         this.action = action;
+        this.type = type;
     }
 
-    public double getCode() {
+    double getCode() {
         return code;
     }
 
-    public int getAction() {
+    int getAction() {
         return action;
     }
+
+    int getType() { return type; }
 }
