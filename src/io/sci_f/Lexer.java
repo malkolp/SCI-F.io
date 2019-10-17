@@ -23,9 +23,9 @@ class Lexer {
 
         while (point <= code.length()){
             if (code.charAt(point) == ' '){
-                if (non_alphanumeric_count == 3) register_trinary(point_temp);
-                if (non_alphanumeric_count == 2) register_secondary(point_temp);
-                else register_value(reg.getToken(point_temp));
+                if      (non_alphanumeric_count == 3) register_trinary(point_temp);
+                else if (non_alphanumeric_count == 2) register_secondary(point_temp);
+                else    register_value(reg.getToken(point_temp));
                 point_temp = "";
             } else {
                 if (non_alphanumeric_count == 3){
