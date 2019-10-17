@@ -24,53 +24,28 @@ class Lexer {
     static void end(){instance = null;}
 
     void process(String code){
-        int point = 0;
-        String point_temp = "";
+        int pointer = 0;
+        String key = "";
         int non_alphanumeric_count = 0;
 
-        while (point <= code.length()){
-            if (code.charAt(point) == ' '){
-                if (non_alphanumeric_count == 3) {
-                    register_trinary(point_temp);
-                    non_alphanumeric_count = 0;
-                }
-                else if (non_alphanumeric_count == 2){
-                    register_secondary(point_temp);
-                    non_alphanumeric_count = 0;
-                }
-                else
-                    register_value(reg.getToken(point_temp));
-                point_temp = "";
+        while(pointer < code.length()){
+            if (code.charAt(pointer) == ' '){
+                //token.register key
+                non_alphanumeric_count = 0;
+                key = "";
+                pointer++;
             } else {
-                if (non_alphanumeric_count == 3){
-                    register_trinary(point_temp);
-                    non_alphanumeric_count = 0;
-                    point_temp = "";
-                }
-                if (code.charAt(point) == '.' && !point_temp.equals("")){
-                    if (isNumeric(point_temp)){
-                        point_temp = point_temp+code.charAt(point);
-                        point++;
-                        continue;
-                    }
-                }
-                if (reg.checkNonAlphanumeric(code.charAt(point))){
-                    point_temp = point_temp+code.charAt(point);
-                    non_alphanumeric_count++;
-                } else {
-                    if (code.charAt(point) == 'f' && !point_temp.equals("")){
-                        if (isDecimal(point_temp)){
-                            point_temp = point_temp+code.charAt(point);
-                            point++;
-                            continue;
-                        }
+                if (isAlphanumerical(code.charAt(pointer)+"")){
+                    if (isAlphanumerical(key)){
+                        key = key+code.charAt(pointer);
+                        pointer++;
                     } else {
-                        if (!isAlphanumerical(point_temp)){
-                        }
+                        //token.register key
+                        non_alphanumeric_count++;
+                        pointer++;
                     }
                 }
             }
-        point++;
         }
     }
 

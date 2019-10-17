@@ -1,0 +1,48 @@
+
+program : lex (String code)
+
+    init pointer     = 0
+    init nonalphanum = 0
+    init key         = ""
+
+    loop pointer < code.length
+        code pointer == SPACE ?
+            true -> key == alphanum() || decimal()?
+                        true -> token.register key
+                                key = ""
+                                pointer++
+                        fals -> token.register key
+                                key = ""
+                                nonalphanum = 0
+                                pointer++
+
+        code pointer == alphanum() ?
+            true -> code pointer == 'f' ?
+                        true -> key == decimal() || alphanum() ?
+                                    true -> key = key + code pointer
+                                            pointer++
+                                    fals -> !ERROR STOP COMPILE!
+                        fals -> key == alphanum() ?
+                                    true -> key = key + code pointer
+                                            pointer++
+                                    fals -> token.register key
+                                            key = code pointer
+                                            nonalphanum = 0
+                                            pointer++
+            fals -> key == alphanum() ?
+                        true -> code pointer == '.' ?
+                                    true -> key == numerical() ?
+                                                true -> key = key + code pointer
+                                                        pointer++
+                                    fals -> token.register key
+                                            key = code pointer
+                                            nonalphanum = 1
+                                            pointer++
+                        fals -> nonalphanum == 3 ?
+                                    true -> token.register key
+                                            key = code pointer
+                                            nonalphanum = 1
+                                            pointer++
+                                    fals -> key = key + code pointer
+                                            nonalphanum++
+                                            pointer++
