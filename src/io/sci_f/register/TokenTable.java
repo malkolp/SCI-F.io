@@ -12,6 +12,7 @@ class TokenTable {
 
     private static final Pattern identifier = Pattern.compile("^([_]+[\\$\\w_]+[\\w]*|[\\$a-zA-Z]+[\\w]*)");
     private static final Pattern constant = Pattern.compile("^([\\d]+[.]?[\\d]+[f]?|[\\d]+)$");
+    private static final Pattern double_constant = Pattern.compile("^([\\d]+[.]?)$");
     private static Matcher matcher;
 
     private TokenTable(){
