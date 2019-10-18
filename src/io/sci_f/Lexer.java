@@ -36,29 +36,24 @@ class Lexer {
                 if (isAlphanumerical(key) || isDecimal(key) || isFloat(key)){
                     register_token(key,true);
                     key = "";
-                    pointer++;
                 } else {
                     register_token(key,false);
                     key = "";
                     nonalphanum = 0;
-                    pointer++;
                 }
             } else {
                 if (isAlphanumerical(chr)){
                     if (isF(chr)){
                         if (isDecimal(key) || isAlphanumerical(key)){
                             key = key + chr;
-                            pointer++;
                         } else {
                             if (isFloat(key)){
                                 register_token(key,true);
                                 key = chr;
-                                pointer++;
                             } else {
                                 register_token(key,false);
                                 key = chr;
                                 nonalphanum = 0;
-                                pointer++;
                             }
                         }
                     } else {
@@ -66,41 +61,36 @@ class Lexer {
                             if (isDot(chr)){
                                 if (isNumeric(key)){
                                     key = key + chr;
-                                    pointer++;
                                 } else {
                                     register_token(key,true);
                                     key = chr;
                                     nonalphanum = 1;
-                                    pointer++;
                                 }
                             } else {
                                 register_token(key,true);
                                 key = chr;
                                 nonalphanum = 1;
-                                pointer++;
                             }
                         } else {
                             if (isFloat(key)){
                                 register_token(key,true);
                                 key = chr;
                                 nonalphanum = 1;
-                                pointer++;
                             } else {
                                 if (nonalphanum == 3){
                                     register_token(key,false);
                                     key = chr;
                                     nonalphanum = 1;
-                                    pointer++;
                                 } else {
                                     key = key + chr;
                                     nonalphanum++;
-                                    pointer++;
                                 }
                             }
                         }
                     }
                 }
             }
+            pointer++;
         }
     }
 
