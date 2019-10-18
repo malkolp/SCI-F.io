@@ -11,7 +11,8 @@ class Lexer {
     private Queue queue = Queue.get();
     private Register reg = Register.get();
     private static Pattern numeric = Pattern.compile("^[\\d]+$");
-    private static Pattern decimal = Pattern.compile("^[\\d]+[.]?$[\\d]+$");
+    private static Pattern decimal = Pattern.compile("^[\\d]+[.][\\d]+$");
+    private static Pattern floats = Pattern.compile("^[\\d]+[.]?[\\d]+f$");
     private static Pattern alphanumerical = Pattern.compile("^[\\w_$]+$");
     private static Matcher matcher;
 
@@ -26,59 +27,142 @@ class Lexer {
     void process(String code){
         int pointer = 0;
         String key = "";
-        int non_alphanumeric_count = 0;
+        String chr;
+        int nonalphanum = 0;
 
         while(pointer < code.length()){
-            if (code.charAt(pointer) == ' '){
-                //token.register key
-                non_alphanumeric_count = 0;
-                key = "";
-                pointer++;
+            chr = code.charAt(pointer)+"";
+            if (isSpace(chr)){
+                if (isAlphanumerical(key) || isDecimal(key) || isFloat(key)){
+                    register_token(key,true);
+                    key = "";
+                    pointer++;
+                } else {
+                    register_token(key,false);
+                    key = "";
+                    nonalphanum = 0;
+                    pointer++;
+                }
             } else {
-                if (isAlphanumerical(code.charAt(pointer)+"")){
-                    if (isAlphanumerical(key)){
-                        key = key+code.charAt(pointer);
-                        pointer++;
+                if (isAlphanumerical(chr)){
+                    if (isF(chr)){
+                        if (isDecimal(key) || isAlphanumerical(key)){
+                            key = key + chr;
+                            pointer++;
+                        } else {
+                            if (isFloat(key)){
+                                register_token(key,true);
+                                key = chr;
+                                pointer++;
+                            } else {
+                                register_token(key,false);
+                                key = chr;
+                                nonalphanum = 0;
+                                pointer++;
+                            }
+                        }
                     } else {
-                        //token.register key
-                        non_alphanumeric_count++;
-                        pointer++;
+                        if (isAlphanumerical(key)){
+                            if (isDot(chr)){
+                                if (isNumeric(key)){
+                                    key = key + chr;
+                                    pointer++;
+                                } else {
+                                    register_token(key,true);
+                                    key = chr;
+                                    nonalphanum = 1;
+                                    pointer++;
+                                }
+                            } else {
+                                register_token(key,true);
+                                key = chr;
+                                nonalphanum = 1;
+                                pointer++;
+                            }
+                        } else {
+                            if (isFloat(key)){
+                                register_token(key,true);
+                                key = chr;
+                                nonalphanum = 1;
+                                pointer++;
+                            } else {
+                                if (nonalphanum == 3){
+                                    register_token(key,false);
+                                    key = chr;
+                                    nonalphanum = 1;
+                                    pointer++;
+                                } else {
+                                    key = key + chr;
+                                    nonalphanum++;
+                                    pointer++;
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    private boolean register_value(double[] value){
-        if (value[0] != -1){
-            queue.enqueue(value[0]);
-            queue.enqueue(value[1]);
-            queue.enqueue(value[2]);
-            return true;
-        }
-        return false;
-    }
+    private void register_token(String key, boolean usealphanum){
+        double[] value;
+        int length = key.length();
 
-    private void register_trinary(String temp){
-        if (!register_value(reg.getToken(temp))){
-            String third_token = temp.charAt(2)+"";
-            temp = temp.charAt(0)+temp.charAt(1)+"";
-            if (!register_value(reg.getToken(temp))){
-                String second_token = temp.charAt(1)+"";
-                temp = temp.charAt(0)+"";
-                register_value(reg.getToken(temp));
-                register_value(reg.getToken(second_token));
+        if (usealphanum){
+            if (isAlphanumerical(key) || isDecimal(key) || isFloat(key)){
+                value = reg.getToken(key);
+                queue.enqueue(value[0]);
+                queue.enqueue(value[1]);
+                queue.enqueue(value[2]);
+            } else {
+                if (reg.checkNonAlphanumeric(key)){
+                    value = reg.getToken(key);
+                    queue.enqueue(value[0]);
+                    queue.enqueue(value[1]);
+                    queue.enqueue(value[2]);
+                } else {
+                    StringBuilder key1 = new StringBuilder();
+                    String key2;
+                    if (length <= 2){
+                        key1 = new StringBuilder(key.charAt(0) + "");
+                        key2 = key.charAt(1)+"";
+                    } else {
+                        for (int i = 0; i < length - 2; i++ )
+                            key1.append(key.charAt(i));
+                        key2 = key.charAt(length-1)+"";
+                    }
+                    register_token(key1.toString(),false);
+                    register_token(key2,false);
+                }
             }
-            register_value(reg.getToken(third_token));
-        }
-    }
-
-    private void register_secondary(String temp){
-        if (!register_value(reg.getToken(temp))){
-            String second_token = temp.charAt(1)+"";
-            temp = temp.charAt(0)+"";
-            register_value(reg.getToken(temp));
-            register_value(reg.getToken(second_token));
+        } else {
+            if (reg.checkNonAlphanumeric(key)){
+                if (length > 1){
+                    StringBuilder key1 = new StringBuilder();
+                    String key2;
+                    if (length > 2){
+                        for (int i = 0; i < length - 2; i ++)
+                            key1.append(key.charAt(i));
+                        key2 = key.charAt(length-1)+"";
+                    } else {
+                        key1 = new StringBuilder(key.charAt(0) + "");
+                        key2 = key.charAt(1)+"";
+                    }
+                    register_token(key1.toString(),false);
+                    register_token(key2,false);
+                } else {
+                    if (reg.checkNonAlphanumeric(key)){
+                        value = reg.getToken(key);
+                        queue.enqueue(value[0]);
+                        queue.enqueue(value[1]);
+                        queue.enqueue(value[2]);
+                    } else {
+                        queue.enqueue(-1);
+                        queue.enqueue(-1);
+                        queue.enqueue(-1);
+                    }
+                }
+            }
         }
     }
 
@@ -92,9 +176,26 @@ class Lexer {
         return matcher.find();
     }
 
+    private boolean isFloat(String temp){
+        matcher = floats.matcher(temp);
+        return matcher.find();
+    }
+
     private boolean isAlphanumerical(String temp){
         matcher = alphanumerical.matcher(temp);
         return matcher.find();
+    }
+
+    private boolean isSpace(String character){
+        return character.equals(" ");
+    }
+
+    private boolean isF(String character){
+        return character.equals("f");
+    }
+
+    private boolean isDot(String character){
+        return character.equals(".");
     }
 
 }

@@ -1,12 +1,15 @@
 
 program : lex (String code)
 
+begin:
     init pointer     = 0
     init nonalphanum = 0
     init key         = ""
+    init chr         = ""
 
     loop pointer < code.length
-        code pointer == SPACE ?
+    chr = code pointer
+        chr == SPACE ?
             true -> key == alphanum() || decimal()?
                         true -> token.register key
                                 key = ""
@@ -16,41 +19,50 @@ program : lex (String code)
                                 nonalphanum = 0
                                 pointer++
 
-        code pointer == alphanum() ?
-            true -> code pointer == 'f' ?
-                        true -> key == decimal() || alphanum() ?
-                                    true -> key = key + code pointer
-                                            pointer++
-                                    fals -> key == float() ?
-                                                true -> token.register key
-                                                        key = code pointer
+             fals -> chr == alphanum() ?
+                        true -> chr == "f" ?
+                                    true -> key == decimal() || alphanum() ?
+                                                true -> key = key + chr
+                                                        pointer++
+                                                fals -> key == float() ?
+                                                            true -> token.register key
+                                                                    key = chr
+                                                                    pointer++
+                                                            fals -> token.register key
+                                                                    key = chr
+                                                                    nonalphanum = 0
+                                                                    pointer++
+                                    fals -> key == alphanum() ?
+                                                true -> key = key + chr
+                                                        pointer++
+                                                fals -> token.register key
+                                                        key = chr
+                                                        nonalphanum = 0
                                                         pointer++
                         fals -> key == alphanum() ?
-                                    true -> key = key + code pointer
-                                            pointer++
-                                    fals -> token.register key
-                                            key = code pointer
-                                            nonalphanum = 0
-                                            pointer++
-            fals -> key == alphanum() ?
-                        true -> code pointer == '.' ?
-                                    true -> key == numerical() ?
-                                                true -> key = key + code pointer
-                                                        pointer++
-                                    fals -> token.register key
-                                            key = code pointer
-                                            nonalphanum = 1
-                                            pointer++
-                        fals -> key == float() ?
-                                    true -> token.register key
-                                            key = code pointer
-                                            nonalphanum = 1
-                                            pointer++
-                                    fals -> nonalphanum == 3 ?
-                                                true -> token.register key
-                                                        key = code pointer
+                                    true -> chr == "." ?
+                                                true -> key == numerical() ?
+                                                            true -> key = key + chr
+                                                                    pointer++
+                                                            fals -> token.register key
+                                                                    key = chr
+                                                                    nonalphanum = 1
+                                                                    pointer++
+                                                fals -> token.register key
+                                                        key = chr
                                                         nonalphanum = 1
                                                         pointer++
-                                                fals -> key = key + code pointer
-                                                        nonalphanum++
+                                    fals -> key == float() ?
+                                                true -> token.register key
+                                                        key = chr
+                                                        nonalphanum = 1
                                                         pointer++
+                                                fals -> nonalphanum == 3 ?
+                                                            true -> token.register key
+                                                                    key = chr
+                                                                    nonalphanum = 1
+                                                                    pointer++
+                                                            fals -> key = key + chr
+                                                                    nonalphanum++
+                                                                    pointer++
+:end

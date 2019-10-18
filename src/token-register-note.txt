@@ -1,0 +1,51 @@
+program : register_token(String key,boolean usealphanum)
+
+begin:
+    init Queue queue
+    init Register reg
+    init value[3]
+    init length = key length
+
+    usealphanum == true ?
+        true -> key == alphanumeric() || decimal() || float() ?
+                    true -> value = reg.register key
+                            queue enqueue value[0]
+                            queue enqueue value[1]
+                            queue enqueue value[2]
+                    fals -> reg value contain key ?
+                                true -> value = reg.register key
+                                        queue enqueue value[0]
+                                        queue enqueue value[1]
+                                        queue enqueue value[2]
+                                fals -> init key1 = ""
+                                        init key2 = ""
+                                        length <= 2 ?
+                                            true -> key1 = key 0
+                                                    key2 = key 1
+                                            fals -> for i = 0 to length - 2
+                                                        key1 = key1 + key i
+                                                    key2 = key length - 1
+                                        register_key key1 , false
+                                        register_key key2 , false
+        fals -> reg value contain key ?
+                    true -> length > 1 ?
+                                true -> init key1 = ""
+                                        init key2 = ""
+                                        length > 2 ?
+                                            true -> for i = 0 to length - 2
+                                                        key1 = key1 + key i
+                                                    key2 = key length - 1
+                                            fals -> key1 = key 0
+                                                    key2 = key 1
+                                        register_key key1 , false
+                                        register_key key2 , false
+                                fals -> reg value contain key ?
+                                            true -> value = reg.register key
+                                                    queue enqueue value[0]
+                                                    queue enqueue value[1]
+                                                    queue enqueue value[2]
+                                            fals -> queue enqueue -1
+                                                    queue enqueue -1
+                                                    queue enqueue -1
+
+:end

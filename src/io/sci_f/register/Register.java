@@ -23,8 +23,8 @@ public class Register {
         }
     }
 
-    public boolean checkNonAlphanumeric(char key){
-        return TokenTable.get().isNotAlphanumeric(key+"");
+    public boolean checkNonAlphanumeric(String key){
+        return TokenTable.get().isNotAlphanumeric(key);
     }
 
     public double[] getToken(String key){
