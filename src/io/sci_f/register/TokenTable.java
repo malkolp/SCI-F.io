@@ -10,10 +10,8 @@ class TokenTable {
     private static HashMap<String,Token> tokentable;
     private static HashMap<String,Integer> nonaplhanumeric;
 
-    private static final Pattern identifier = Pattern.compile("^([_]+[\\$\\w_]+[\\w]*|[\\$a-zA-Z]+[\\w]*)");
-    private static final Pattern constant = Pattern.compile("^([\\d]+[.]?[\\d]+[f]?|[\\d]+)$");
-    private static final Pattern double_constant = Pattern.compile("^([\\d]+[.]?)$");
-    private static Matcher matcher;
+    private static final Pattern identifier = Pattern.compile("^([_]+[$\\w_]+[\\w]*|[$a-zA-Z]+[\\w]*)$");
+    private static final Pattern constant = Pattern.compile("^([\\d]+)$|^([\\d]+[.][\\d]+)$|^([\\d]+[.]?[\\d]+f)$");
 
     private TokenTable(){
         tokentable = new HashMap<>();
@@ -43,7 +41,7 @@ class TokenTable {
             value[2] = token.getType();
             return value;
         }
-        matcher = identifier.matcher(key);
+        Matcher matcher = identifier.matcher(key);
         if (matcher.find()){
             token = tokentable.get("$id");
             value[0] = token.getCode();
@@ -64,12 +62,6 @@ class TokenTable {
         value[2] = -1;
         return value;
     }
-
-    int get_action(String key){return tokentable.get(key).getAction();}
-
-    double get_code(String key){return tokentable.get(key).getCode();}
-
-    double get_type(String key){return tokentable.get(key).getType();}
 
     static void end() {
         tokentable = null;
